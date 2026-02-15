@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ceu Trailer</title>
+
+<style>
+body {
+    margin: 0;
+    background: black;
+    overflow: hidden;
+}
+
+#container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    aspect-ratio: 9 / 16;
+    background: black;
+}
+
+video {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+#textOverlay {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-size: 3em;
+    top: 40%;
+    text-shadow: 0 0 20px black;
+}
+
+.fade {
+    animation: fade 0.5s ease-in-out;
+}
+
+@keyframes fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+</style>
+</head>
+
+<body>
+
+<div id="container">
+
+    <!-- GLITCH TEASE CLIP (First 1–2 seconds) -->
+    <video id="clip1" src="clips/glitch_tease.mp4"></video>
+
+    <!-- BUILDING MONTAGE CLIP -->
+    <video id="clip2" src="clips/building_fast.mp4"></video>
+
+    <!-- HOUSE PROGRESS CLIP -->
+    <video id="clip3" src="clips/house_progress.mp4"></video>
+
+    <!-- CALM / SUSPENSE CLIP -->
+    <video id="clip4" src="clips/calm_shot.mp4"></video>
+
+    <!-- FULL GLITCH ENDING CLIP -->
+    <video id="clip5" src="clips/full_glitch.mp4"></video>
+
+    <!-- BACKGROUND MUSIC -->
+    <audio id="music" src="clips/music.mp3"></audio>
+
+    <div id="textOverlay"></div>
+
+</div>
+
+<script>
+
+const text = document.getElementById("textOverlay");
+const music = document.getElementById("music");
+
+const clips = [
+    { video: "clip1", duration: 2000, text: "This wasn’t supposed to happen." },
+    { video: "clip2", duration: 4000, text: "Episode 1." },
+    { video: "clip3", duration: 6000, text: "We built our first house..." },
+    { video: "clip4", duration: 5000, text: "But something felt off." },
+    { video: "clip5", duration: 7000, text: "" }
+];
+
+let current = 0;
+
+function playNext() {
+
+    if (current > 0) {
+        document.getElementById(clips[current-1].video).style.display = "none";
+        document.getElementById(clips[current-1].video).pause();
+    }
+
+    if (current >= clips.length) {
+        text.innerHTML = "Ceu’s Amazing World<br>Episode 1<br>Out Now.";
+        return;
+    }
+
+    const clip = document.getElementById(clips[current].video);
+    clip.style.display = "block";
+    clip.currentTime = 0;
+    clip.play();
+
+    text.innerHTML = clips[current].text;
+    text.classList.add("fade");
+
+    if (current === 1) {
+        music.play(); // Music starts during montage
+    }
+
+    setTimeout(() => {
+        current++;
+        playNext();
+    }, clips[current].duration);
+}
+
+window.onload = () => {
+    playNext();
+};
+
+</script>
+
+</body>
+</html>
